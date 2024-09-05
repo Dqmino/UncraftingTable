@@ -1,0 +1,4 @@
+/mods
+/give @a uncraftingtable:uncrafting_table
+/time set 0
+/give @a minecraft:golden_sword

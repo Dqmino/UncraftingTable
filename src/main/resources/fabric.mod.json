@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "uncraftingtable",
+  "version": "${version}",
+  "name": "Uncrafting Table",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "codes.domino.uncraftingtable.UncraftingTable"
+    ]
+  },
+  "mixins": [
+    "uncraftingtable.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
