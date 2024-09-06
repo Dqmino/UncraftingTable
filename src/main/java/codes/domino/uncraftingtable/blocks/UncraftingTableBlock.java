@@ -3,6 +3,8 @@ package codes.domino.uncraftingtable.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -28,6 +30,7 @@ public class UncraftingTableBlock extends Block {
         if (hand == InteractionHand.OFF_HAND) {
             return ItemInteractionResult.FAIL;
         }
+        boolean success = false;
 
         for (RecipeHolder<?> recipeHolder : level.getRecipeManager().getRecipes()) {
             Recipe<?> recipe = recipeHolder.value();
@@ -45,14 +48,18 @@ public class UncraftingTableBlock extends Block {
                 for (ItemStack item : ingredient.getItems()) {
                     item = item.copy();
                     if (!player.getInventory().add(item)) {
-                        player.drop(item, false);
+                        BlockPos playerPos = player.blockPosition();
+                        ItemEntity itemEntity = new ItemEntity(level, playerPos.getX(), playerPos.getY(), playerPos.getZ(), item);
+                        itemEntity.setDefaultPickUpDelay();
+                        level.addFreshEntity(itemEntity);
                     }
                 }
             }
             stack.shrink(getRecipeResult(recipe, level).getCount());
+            success = true;
             break;
         }
-        return ItemInteractionResult.SUCCESS;
+        return success ? ItemInteractionResult.SUCCESS : ItemInteractionResult.FAIL;
     }
     private boolean circularRecipeExists(Level level, Recipe<?> recipe, ItemStack item) {
         return getRecipeResult(recipe, level).getCount() > item.getCount();
